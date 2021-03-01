@@ -60,7 +60,7 @@ class LocalUpdateSections(object):
     """Updates sectionnames. Requires: courseid and an array with sectionnumbers and sectionnames"""
     def __init__(self, cid, sectionsdata):
         self.updatesections = call('local_wsmanagesections_update_sections', courseid = cid, sections = sectionsdata)
-        
+
 ################################################
 # Example
 ################################################
@@ -75,4 +75,13 @@ sec = LocalGetSections(courseid)
 # Get sections ids of the course with the given numbers and given ids.
 #sec = LocalGetSections(courseid, [0, 1, 2, 3, 5, 6], [7186, 7187, 7188, 7189])
 #print(sec.getsections)
+print(json.dumps(sec.getsections[1]['summary'], indent=4, sort_keys=True))
+
+summary='<a href="https://mikhail-cct.github.io/ooapp/wk3/#/">Week 1: Introduction</a>'
+
+data = [{'type': 'num', 'section': 1, 'summary': '', 'summaryformat': 1, 'visible': 1 , 'highlight': 0, 'sectionformatoptions': [{'name': 'level', 'value': '1'}]}]
+        
+data[0]['summary']=summary        
+sec_write = LocalUpdateSections(courseid, data)
+sec = LocalGetSections(courseid)
 print(json.dumps(sec.getsections[1]['summary'], indent=4, sort_keys=True))
