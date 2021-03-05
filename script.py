@@ -1,5 +1,6 @@
 from requests import get, post
 import json
+<<<<<<< HEAD
 from dateutil import parser
 import datetime
 
@@ -10,6 +11,15 @@ KEY = "8cc87cf406775101c2df87b07b3a170d"
 URL = "https://034f8a1dcb5c.eu.ngrok.io"
 ENDPOINT = "/webservice/rest/server.php"
 
+=======
+
+# Module variables to connect to moodle api:
+## Insert token and URL for your site here. 
+## Mind that the endpoint can start with "/moodle" depending on your installation.
+KEY = "8cc87cf406775101c2df87b07b3a170d" 
+URL = "https://034f8a1dcb5c.eu.ngrok.io"
+ENDPOINT="/webservice/rest/server.php"
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
 
 def rest_api_parameters(in_args, prefix='', out_dict=None):
     """Transform dictionary/array structure to a flat dictionary, with key names
@@ -19,24 +29,40 @@ def rest_api_parameters(in_args, prefix='', out_dict=None):
     {'courses[0][id]':1,
      'courses[0][name]':'course1'}
     """
+<<<<<<< HEAD
     if out_dict == None:
         out_dict = {}
     if not type(in_args) in (list, dict):
+=======
+    if out_dict==None:
+        out_dict = {}
+    if not type(in_args) in (list,dict):
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
         out_dict[prefix] = in_args
         return out_dict
     if prefix == '':
         prefix = prefix + '{0}'
     else:
         prefix = prefix + '[{0}]'
+<<<<<<< HEAD
     if type(in_args) == list:
         for idx, item in enumerate(in_args):
             rest_api_parameters(item, prefix.format(idx), out_dict)
     elif type(in_args) == dict:
+=======
+    if type(in_args)==list:
+        for idx, item in enumerate(in_args):
+            rest_api_parameters(item, prefix.format(idx), out_dict)
+    elif type(in_args)==dict:
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
         for key, item in in_args.items():
             rest_api_parameters(item, prefix.format(key), out_dict)
     return out_dict
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
 def call(fname, **kwargs):
     """Calls moodle API function with function name fname and keyword arguments.
     Example:
@@ -44,9 +70,14 @@ def call(fname, **kwargs):
                            courses = [{'id': 1, 'fullname': 'My favorite course'}])
     """
     parameters = rest_api_parameters(kwargs)
+<<<<<<< HEAD
     parameters.update(
         {"wstoken": KEY, 'moodlewsrestformat': 'json', "wsfunction": fname})
     # print(parameters)
+=======
+    parameters.update({"wstoken": KEY, 'moodlewsrestformat': 'json', "wsfunction": fname})
+    #print(parameters)
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
     response = post(URL+ENDPOINT, data=parameters).json()
     if type(response) == dict and response.get('exception'):
         raise SystemError("Error calling Moodle API\n", response)
@@ -56,6 +87,7 @@ def call(fname, **kwargs):
 # Rest-Api classes
 ################################################
 
+<<<<<<< HEAD
 
 class LocalGetSections(object):
     """Get settings of sections. Requires courseid. Optional you can specify sections via number or id."""
@@ -71,12 +103,26 @@ class LocalUpdateSections(object):
     def __init__(self, cid, sectionsdata):
         self.updatesections = call(
             'local_wsmanagesections_update_sections', courseid=cid, sections=sectionsdata)
+=======
+class LocalGetSections(object):
+    """Get settings of sections. Requires courseid. Optional you can specify sections via number or id."""
+    def __init__(self, cid, secnums = [], secids = []):
+        self.getsections = call('local_wsmanagesections_get_sections', courseid = cid, sectionnumbers = secnums, sectionids = secids)
+
+class LocalUpdateSections(object):
+    """Updates sectionnames. Requires: courseid and an array with sectionnumbers and sectionnames"""
+    def __init__(self, cid, sectionsdata):
+        self.updatesections = call('local_wsmanagesections_update_sections', courseid = cid, sections = sectionsdata)
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
 
 ################################################
 # Example
 ################################################
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
 courseid = "22"  # Exchange with valid id.
 # Get all sections of the course.
 sec = LocalGetSections(courseid)
@@ -95,7 +141,11 @@ print(month.strftime("%V"))
 data = [{'type': 'num', 'section': 0, 'summary': '', 'summaryformat': 1, 'visible': 1 , 'highlight': 0, 'sectionformatoptions': [{'name': 'level', 'value': '1'}]}]
 
 # Assemble the correct summary
+<<<<<<< HEAD
 summary = '<a href="https://mikhail-cct.github.io/ca3-test/wk1/">Week 1: Introduction</a><br><a href="https://mikhail-cct.github.io/ca3-test/wk1/wk1.pdf">Week 1: Introduction.pdf</a><br><a href="https://drive.google.com/file/d/1vyPoSlUc5hcXajllDyaqMKvlJOiYxbNH/view?usp=sharing">Week 1: Introduction.mp4</a>'
+=======
+summary = '<a href="https://mikhail-cct.github.io/ca3-test/wk1/">Week 1: Introduction</a><br>'
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
 
 # Assign the correct summary
 data[0]['summary'] = summary
@@ -107,6 +157,7 @@ data[0]['section'] = 1
 sec_write = LocalUpdateSections(courseid, data)
 
 sec = LocalGetSections(courseid)
+<<<<<<< HEAD
 print(json.dumps(sec.getsections[1]['summary'], indent=4, sort_keys=True))
 ####################################################################### Week 2
 #  Assemble the payload
@@ -165,3 +216,6 @@ sec_write = LocalUpdateSections(courseid, data)
 sec = LocalGetSections(courseid)
 print(json.dumps(sec.getsections[1]['summary'], indent=4, sort_keys=True))
 
+=======
+print(json.dumps(sec.getsections[1]['summary'], indent=4, sort_keys=True))
+>>>>>>> c86baeaa2a6470e9c44ee5b3145d85dc3bb33b7a
